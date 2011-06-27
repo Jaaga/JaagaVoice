@@ -1,8 +1,13 @@
 package run;
 
+import java.io.File;
 import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,18 +19,21 @@ import com.sun.syndication.feed.synd.SyndContentImpl;
 import com.sun.syndication.feed.synd.SyndEntry;
 
 import network.RssReader;
-
+/*
+ * pass file listing all RSS feeds (each on separate line) as argument 1
+ */
 public class RunRss {
 	public static void main(String args[]){
-
-		String [] feeds = {"http://deweyhagborg.wordpress.com/feed", 
-				"http://feeds.feedburner.com/rhizome-art?format=xml",
-				"http://feeds.feedburner.com/rhizome-fp?format=xml",
-					"http://feeds.feedburner.com/rhizome-discuss?format=xml",
-					"http://www.eyebeam.org/subscribe/full.xml",
-				"http://feeds.feedburner.com/douglasrushkoff",
-				"http://yruminate.wordpress.com/feed/"};
-		//TODO get feeds from DB
+		File feedFile = new File(args[0]);
+		List<String> feeds = null;
+		try {
+			feeds = FileUtils.readLines(feedFile);
+		} catch (IOException e1) {
+			System.out.println("couldn't open rss feeds file");
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		System.out.println("feeds: " + feeds);
 
 		for (String feed: feeds){
 			RssReader reader = null;

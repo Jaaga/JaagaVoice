@@ -1,0 +1,8 @@
+http://deweyhagborg.wordpress.com/feed
+http://jaaga.in/rss.xml
+http://feeds.feedburner.com/rhizome-art?format=xml
+http://feeds.feedburner.com/rhizome-fp?format=xml
+http://feeds.feedburner.com/rhizome-discuss?format=xml
+http://www.eyebeam.org/subscribe/full.xml
+http://feeds.feedburner.com/douglasrushkoff
+http://yruminate.wordpress.com/feed/

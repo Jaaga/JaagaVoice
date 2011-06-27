@@ -219,7 +219,8 @@ public class LanguageModel extends PApplet implements Serializable {
 
 	public int countSyllables(List <String> words) {
 		RiAnalyzer ra = new RiAnalyzer(this);
-		//RiLetterToSound.VERBOSE = false;
+		RiLetterToSound.VERBOSE = false;
+		
 		int count = 0;
 		for (String s: words){
 			try {
