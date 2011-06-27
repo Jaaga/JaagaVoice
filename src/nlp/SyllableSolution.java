@@ -16,6 +16,15 @@ public class SyllableSolution implements Solution {
 		ngram = _ngram;
 		goal = _goal;
 	}
+	
+	SyllableSolution(LanguageModel _lm, int _ngram, int _goal, String _start){
+		lm = _lm;
+		ngram = _ngram;
+		goal = _goal;
+		
+		//given a start word
+		words.add(_start);
+	}
 
 	@Override
 	public List<String> getObjective() {

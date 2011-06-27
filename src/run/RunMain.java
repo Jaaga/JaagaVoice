@@ -116,7 +116,15 @@ public class RunMain {
 			
 			GenerateSableFile sable = new GenerateSableFile();
 			List<String> words1 = lm.generateSyllables(8);
-			List<String> words2 = lm.generateSyllables(8);
+			List<String> words2;
+			if ( lm.isEndWord(words1.get(words1.size()-1) ))
+				words2 = lm.generateSyllables(8);
+			else {
+				String last = words1.get(words1.size()-1); //get last word in last phrase
+				List<String> next = lm.generatePhrase(2, last);
+				System.out.println(next);
+				words2 = lm.generateSyllables(8, next.get(next.size()-1));
+			}
 			List<String> words3 = lm.generateSyllables(8);
 			List<String> words4 = lm.generateSyllables(8);
 			System.out.println(words1);

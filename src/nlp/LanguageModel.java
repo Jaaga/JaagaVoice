@@ -197,10 +197,58 @@ public class LanguageModel extends PApplet implements Serializable {
 		}
 		return words;
 	}
+	
+	public List<String> generatePhrase(int numWords, String start) {
+		List <String> words = new ArrayList<String>();
+		words.add(start);
+
+		//now choose a next word based on probability
+		//repeat, increasing N context until stop condition
+		for (int i=1; i<numWords; i++){
+			System.out.println("choosing word " + i);
+			//update ngram size based on # words chosen so far
+			int n = 0;
+			if (words.size()+1<=NGRAM)
+				n = words.size()+1; 
+			else n = NGRAM;
+
+			//get ngrams
+			HashMap<ArrayList<String>, Integer> ngrams = allNgramCounts.get(n);
+			//get all possible next words
+			Set<ArrayList<String>> allPoss = ngrams.keySet();
+
+			List<String> currentNgram = words.subList(words.size()-(n-1), words.size());
+
+			ArrayList<String>  weightedPossibilities = new ArrayList<String>();
+			for (ArrayList<String> focus : allPoss){
+				if (focus.subList(0, n-1).equals(currentNgram)){
+					//add word to weighted possibility list times = weight/strength of this ngram
+					for (int times=0; times<ngrams.get(focus); times++) weightedPossibilities.add(focus.get(focus.size()-1));
+				}
+			}
+			if (weightedPossibilities.size()>0){
+				//choose 
+				System.out.println("Number of options: " + weightedPossibilities.size());
+				words.add((String) RiTa.random(weightedPossibilities));
+			}
+			else{
+				break;
+			}
+		}
+		return words;
+	}
 
 	public List<String> generateSyllables(int numSyllables) {
 		DepthFirstSolver solver = new DepthFirstSolver();
 		SyllableSolution solution = new SyllableSolution(this, NGRAM, numSyllables);
+		solver.solve(solution);
+		
+		return solver.getBest().getObjective();
+	}
+	
+	public List<String> generateSyllables(int numSyllables, String startWord) {
+		DepthFirstSolver solver = new DepthFirstSolver();
+		SyllableSolution solution = new SyllableSolution(this, NGRAM, numSyllables, startWord);
 		solver.solve(solution);
 		
 		return solver.getBest().getObjective();
@@ -303,5 +351,10 @@ public class LanguageModel extends PApplet implements Serializable {
 			stresses.addAll(stressSeq);
 		}
 		return stresses;
+	}
+
+	public boolean isEndWord(String string) {
+		if (ends.contains(string)) return true;
+		else return false;
 	}
 }

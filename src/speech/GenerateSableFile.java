@@ -13,10 +13,9 @@ import nlp.LanguageModel;
 import util.Tools;
 
 public class GenerateSableFile extends PApplet{
+	private String sableHeader = "<?xml version=\"1.0\"?><!DOCTYPE SABLE PUBLIC \"-//SABLE//DTD SABLE speech mark up//EN\" \"Sable.v0_2.dtd\"[]>\n<SABLE>\n<SPEAKER NAME=\"jaaga\">\n";
+
 	public void generate(List<String> words, String pathname) throws IOException{
-		//TODO add begin speaker here
-		//<SPEAKER NAME="male1">
-		String sableHeader = "<?xml version=\"1.0\"?><!DOCTYPE SABLE PUBLIC \"-//SABLE//DTD SABLE speech mark up//EN\" \"Sable.v0_2.dtd\"[]>\n<SABLE>\n<SPEAKER NAME=\"female1\">\n";
 		String content = "";
 		RiAnalyzer ra = new RiAnalyzer(this);
 		
@@ -49,7 +48,6 @@ public class GenerateSableFile extends PApplet{
 	public void generate(List<String> words1, List<String> words2, List<String> words3, 
 			List<String> words4, String pathname) throws IOException{
 
-		String sableHeader = "<?xml version=\"1.0\"?><!DOCTYPE SABLE PUBLIC \"-//SABLE//DTD SABLE speech mark up//EN\" \"Sable.v0_2.dtd\"[]>\n<SABLE>\n<SPEAKER NAME=\"female1\">\n";
 		String content = "";
 		RiAnalyzer ra = new RiAnalyzer(this);
 		
