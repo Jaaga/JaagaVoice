@@ -25,6 +25,7 @@ import util.Tools;
 public class LanguageModel extends PApplet implements Serializable {
 
 	private static final long serialVersionUID = 2430698901058667085L;
+	private static final int BIGRAM = 2;
 	public int NGRAM;
 	Map<Integer, HashMap<ArrayList<String>, Integer>> allNgramCounts; 
 	List <String> beginnings;
@@ -247,9 +248,16 @@ public class LanguageModel extends PApplet implements Serializable {
 	}
 	
 	public List<String> generateSyllables(int numSyllables, String startWord) {
+		//System.out.println("trying to generate with " + startWord);
+		//System.out.println("poss: " + allNgramCounts.get(NGRAM).get(startWord));
 		DepthFirstSolver solver = new DepthFirstSolver();
 		SyllableSolution solution = new SyllableSolution(this, NGRAM, numSyllables, startWord);
 		solver.solve(solution);
+		if (solver.getBest()==null){
+			System.out.println("no solution");
+			List<String> empty = new ArrayList<String>();
+			return empty;
+		}
 		
 		return solver.getBest().getObjective();
 	}
@@ -354,7 +362,65 @@ public class LanguageModel extends PApplet implements Serializable {
 	}
 
 	public boolean isEndWord(String string) {
-		if (ends.contains(string)) return true;
+		//if (ends.contains(string))
+		
+		String [] tokens = {string};
+		String[] tags = RiTa.posTag(tokens);
+		
+		if (tags[0].contains("nn")) {
+			System.out.println("is noun");
+			return true; //end on noun OK
+		}
+		if (ends.contains(string) 
+				&& !tags[0].equals("dt") 
+				&& !tags[0].equals("in")) {
+			System.out.println("is an end");
+			return true; //end word
+		}
 		else return false;
+	}
+
+	public List<String> resolve(List<String> existingWords) {
+		List <String> words = new ArrayList<String>();
+		words.addAll(existingWords);
+
+		//now choose a next word based on probability
+		//repeat, increasing N context until stop condition
+		while (! isEndWord(words.get(words.size()-1))){
+			System.out.println(words);
+			System.out.println("choosing word towards end word");
+			
+			//update ngram size based on # words chosen so far
+			//limit to bigram for this
+			int n = 0;
+			if (words.size()+1<=BIGRAM)
+				n = words.size()+1; 
+			else n = BIGRAM;
+
+			//get ngrams
+			HashMap<ArrayList<String>, Integer> ngrams = allNgramCounts.get(n);
+			//get all possible next words
+			Set<ArrayList<String>> allPoss = ngrams.keySet();
+
+			List<String> currentNgram = words.subList(words.size()-(n-1), words.size());
+
+			ArrayList<String>  weightedPossibilities = new ArrayList<String>();
+			for (ArrayList<String> focus : allPoss){
+				if (focus.subList(0, n-1).equals(currentNgram)){
+					//add word to weighted possibility list times = weight/strength of this ngram
+					for (int times=0; times<ngrams.get(focus); times++) weightedPossibilities.add(focus.get(focus.size()-1));
+				}
+			}
+			if (weightedPossibilities.size()>0){
+				//choose 
+				System.out.println("Number of options: " + weightedPossibilities.size());
+				words.add((String) RiTa.random(weightedPossibilities));
+			}
+			else{
+				System.out.println("no more options");
+				break;
+			}
+		}
+		return words;
 	}
 }

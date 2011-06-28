@@ -115,7 +115,7 @@ public class Tools {
 	public static String stripPunctuation(String sent) {
 		String retString;
 		//remove .,!?:-
-		String punct = "[\\_#$&;.,:!?'\"“”+()-/]";
+		String punct = "[\\_#$&;.,:!?\"“”+()-/]";
 		Pattern p1 = Pattern.compile(punct);
 		Matcher m1 = p1.matcher(sent);
 		retString = m1.replaceAll("");

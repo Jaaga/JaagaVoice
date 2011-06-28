@@ -47,7 +47,7 @@ public class SyllableSolution implements Solution {
 		else children = lm.getRandomChildren(words);
 		//System.out.println("words: " + words);
 
-		//System.out.println(children);
+		//System.out.println("poss: " + children);
 		//pack each successor into a solution
 		for (String s: children){
 			SyllableSolution ss = new SyllableSolution(lm, ngram, goal);

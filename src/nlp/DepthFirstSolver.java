@@ -13,6 +13,7 @@ public class DepthFirstSolver extends AbstractSolver {
 		}
 		else{
 			List<Solution> children = solution.getSucessors();
+			
 			for (Solution s: children){
 				boolean done = search(s);
 				if (done){

@@ -78,7 +78,7 @@ public class GenerateSableFile extends PApplet{
 					content += w + " ";
 				}
 			}
-			content += "<BREAK LEVEL=\"LARGE\"/>\n";
+			content += "<BREAK />\n";
 		}
 
 		String sableFooter = "\n</SPEAKER>\n</SABLE>"; 

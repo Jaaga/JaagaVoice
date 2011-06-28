@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import processing.core.PApplet;
+
 import network.Doc;
 import nlp.LanguageModel;
 import speech.GenerateSableFile;
@@ -15,19 +17,86 @@ import util.Tools;
  *        1 - NGRAM level to use ie. 3,4,5
  */
 public class RunMain {
+	static LanguageModel lm;
+	static String lmPath;
+	
+	public static void loop(){
+		try{
+			//check for existence of file "NEW"
+			//means we have new data for LM
+			File flag = new File("NEW");
+			if (flag.exists()){
+				System.out.println("new data to process");
+				//if it exists load sentences from
+				//new  entries from the DB
+				//mark these entries as read
+				List<Doc> newDocs;
+				//TODO get only unread RSS docs
+				newDocs = DBUtil.getUnreadRssDocs(true);
 
-	public static void main(String args[]){
-		////////////////////////////////////////
-		//////// DO ONCE ON START  ////////////
-		///////////////////////////////////////
+				if (newDocs.size()==0) {
+					System.out.println("we have NO unread docs");
+				}
 
+				//delete file "NEW"
+				flag.delete();
+
+				//add new data to LM
+				for (Doc d: newDocs){
+					System.out.println("\nsending to LM: " + d.title);
+					lm.handle(d.title); 
+					System.out.println("\nsending to LM: " + d.content);
+					lm.handle(d.content);
+				}
+
+				//reserialize language model
+				try {
+					Tools.serialize(lm, lmPath);
+				} catch (Exception e) {
+					System.out.println("Couldn't reserialize updated language model");
+					e.printStackTrace();
+					System.exit(-1);
+				}
+			}
+			else System.out.println("no new data to read");
+
+			//generate text using pluggable method
+
+			GenerateSableFile sable = new GenerateSableFile();
+			List<String> words1 = lm.generateSyllables(8);
+			List<String> words2 = generateNextLine(lm, words1, false);
+			List<String> words3 = generateNextLine(lm, words2, false);
+			List<String> words4 = generateNextLine(lm, words3, true);
+			System.out.println();
+			System.out.println(words1);
+			System.out.println(words2);
+			System.out.println(words3);
+			System.out.println(words4);
+			System.out.println();
+
+			try {
+				//sable.generate(words1, "tospeak.sable");
+				sable.generate(words1, words2, words3, words4, "tospeak.sable");
+				System.out.println("generated: tospeak.sable");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			//speak!
+			int success = Speak.festivalSpeak("tospeak.sable");
+			System.out.println("speaking result " + success);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	public static void setup(String args[]){
 		//check for a previous saved language (markov) model
 		//if it exists deserialize and load it.
-		String lmPath = args[0];
+		lmPath = args[0];
 		System.out.println("using " + lmPath);
 		int N = Integer.parseInt(args[1]);
 		File lmFile = new File(lmPath);
-		LanguageModel lm = null; 
 
 		if (lmFile.exists()){
 			System.out.println("language model file " + lmPath + " exists");
@@ -68,82 +137,45 @@ public class RunMain {
 				System.exit(-1);
 			}
 		}
-
-		/////////////////////////////////
-		////  LOOP  /////////////////////
-		/////////////////////////////////
-		//while (true){
-		for (int i=0; i<4; i++){
-			//check for existence of file "NEW"
-			//means we have new data for LM
-			File flag = new File("NEW");
-			if (flag.exists()){
-				System.out.println("new data to process");
-				//if it exists load sentences from
-				//new  entries from the DB
-				//mark these entries as read
-				List<Doc> newDocs;
-				//TODO get only unread RSS docs
-				newDocs = DBUtil.getUnreadRssDocs(true);
-
-				if (newDocs.size()==0) {
-					System.out.println("we have NO unread docs");
-				}
-
-				//delete file "NEW"
-				flag.delete();
-
-				//add new data to LM
-				for (Doc d: newDocs){
-					System.out.println("\nsending to LM: " + d.title);
-					lm.handle(d.title); 
-					System.out.println("\nsending to LM: " + d.content);
-					lm.handle(d.content);
-				}
-
-				//reserialize language model
-				try {
-					Tools.serialize(lm, lmPath);
-				} catch (Exception e) {
-					System.out.println("Couldn't reserialize updated language model");
-					e.printStackTrace();
-					System.exit(-1);
-				}
-			}
-			else System.out.println("no new data to read");
-
-			//generate text using pluggable method
-			
-			GenerateSableFile sable = new GenerateSableFile();
-			List<String> words1 = lm.generateSyllables(8);
-			List<String> words2;
-			if ( lm.isEndWord(words1.get(words1.size()-1) ))
-				words2 = lm.generateSyllables(8);
-			else {
-				String last = words1.get(words1.size()-1); //get last word in last phrase
-				List<String> next = lm.generatePhrase(2, last);
-				System.out.println(next);
-				words2 = lm.generateSyllables(8, next.get(next.size()-1));
-			}
-			List<String> words3 = lm.generateSyllables(8);
-			List<String> words4 = lm.generateSyllables(8);
-			System.out.println(words1);
-			System.out.println(words2);
-			System.out.println(words3);
-			System.out.println(words4);
-			
-			try {
-				//sable.generate(words1, "tospeak.sable");
-				sable.generate(words1, words2, words3, words4, "tospeak.sable");
-				System.out.println("generated: tospeak.sable");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			//speak!
-			int success = Speak.festivalSpeak("tospeak.sable");
-			System.out.println("speaking result " + success);
-		}
 	}
 	
+	public static void main(String args[]){
+		setup(args);
+		while(true) loop();
+
+		
+	}
+
+	private static List<String> generateNextLine(LanguageModel lm,
+			List<String> prevWords, boolean isLastLine) {
+		List<String> nextLine;
+		System.out.println("prevWords: " + prevWords);
+		if ( lm.isEndWord(prevWords.get(prevWords.size()-1) ))
+			nextLine = lm.generateSyllables(8);
+
+		else {
+			String last = prevWords.get(prevWords.size()-1); //get last word in last phrase
+			List<String> next = lm.generatePhrase(2, last);
+			System.out.println("next: " + next);
+			if (next.size() > 1){
+				System.out.println("size large enough");
+				nextLine = lm.generateSyllables(8, next.get(next.size()-1));
+				if (nextLine.isEmpty()) nextLine = lm.generateSyllables(8);
+			}
+			else{
+				System.out.println("size too small");
+				nextLine = lm.generateSyllables(8);
+			}
+		}
+		if (isLastLine){
+			System.out.println("is last line");
+			if (! lm.isEndWord(nextLine.get(nextLine.size()-1) )){
+				System.out.println("not properly resolved");
+				nextLine = lm.resolve(nextLine);
+			}
+		}
+		System.out.println(nextLine);
+		return nextLine;
+	}
+
 }
