@@ -283,7 +283,7 @@ public class LanguageModel extends PApplet implements Serializable {
 		for (String s: words){			
 			s = Tools.stripSpecialChars(s);
 			s = s.replace("'", "");
-			if (s.length() == 0) continue;
+			if (s.length() == 0 || s.equals(" ")) continue;
 			try {
 				ra.analyze(s);
 				String syl = ra.getSyllables();
@@ -292,7 +292,7 @@ public class LanguageModel extends PApplet implements Serializable {
 			catch(Exception e){
 				count = 1;
 				//e.printStackTrace();
-				System.out.println("Cant analyze " + s);
+				//System.out.println("Cant analyze " + s);
 			}
 		}
 		return count;
@@ -368,7 +368,7 @@ public class LanguageModel extends PApplet implements Serializable {
 	}
 
 	public boolean isEndWord(String string) {
-		//if (ends.contains(string))
+		if (string.length() == 0) return false;
 		
 		String [] tokens = {string};
 		String[] tags = RiTa.posTag(tokens);

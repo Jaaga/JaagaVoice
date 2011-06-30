@@ -31,16 +31,16 @@ public class RunSystemCommand {
 		while ((str = br.readLine()) != null) list.add(str);
 
 		// Wait for process to terminate and catch any Exceptions.
-		try { proc.waitFor(); } 
+		/*try { proc.waitFor(); } 
 		catch (InterruptedException e) {
-			System.out.println("Process was interrupted"); }
+			System.out.println("Process was interrupted"); }*/
 
 		// Note: proc.exitValue() returns the exit value. 
 		// (Use if required)
 		//System.out.println("Exit: " + proc.exitValue());
 		br.close(); // Done.
 
-		// Convert the list to a string and return
+	/*	// Convert the list to a string and return
 		String[] outlist = (String[])list.toArray(new String[0]); 
 		// Print the output to screen character by character.
 		// Safe and not very inefficient.
@@ -48,7 +48,8 @@ public class RunSystemCommand {
 		for (int i = 0; i < outlist.length; i++){
 			System.out.println(outlist[i]);
 		}
-		return proc.exitValue();
+		return proc.exitValue();*/
+		return 0;
 	}
 
 	// Actual execution starts here

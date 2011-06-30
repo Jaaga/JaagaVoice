@@ -18,3 +18,8 @@ http://worldofweirdthings.com/feed/rss/
 http://edge.org/feeds/
 http://feeds.feedburner.com/SingularityHub
 http://feeds.feedburner.com/AcceleratingFuture
+http://feeds.feedburner.com/theorynow?format=xml
+http://modernkicks.typepad.com/modern_kicks/atom.xml
+http://feeds.feedburner.com/ArtFagCity?format=xml
+http://grammarpolice.net/index.xml
+http://thisishowitshouldbe.blogspot.com/feeds/posts/default

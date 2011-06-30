@@ -102,7 +102,7 @@ public class Tools {
 		ObjectOutputStream objout = new ObjectOutputStream (new FileOutputStream(path));
 		objout.writeObject(obj);
 		objout.close();
-		System.out.println("wrote " + obj);
+		//System.out.println("wrote " + obj);
 	}
 	public static Object deserialize(String path) throws IOException, ClassNotFoundException{
 		ObjectInputStream objin = new ObjectInputStream(new FileInputStream(path));

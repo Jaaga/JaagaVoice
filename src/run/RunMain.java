@@ -78,15 +78,20 @@ public class RunMain {
 			System.out.println(text);
 
 			try {
-				//sable.generate(words1, "tospeak.sable");
 				sable.generate(words1, words2, words3, words4, "tospeak.sable");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
+			//could write text to a file here for screen output
+			
 			//speak!
 			int success = Speak.festivalSpeak("tospeak.sable");
-			System.out.println("...");
+			System.out.println(".");
+			
+			Thread.sleep(10000);
+			
+			System.out.println(".");
 		}
 		catch (Exception e){
 			e.printStackTrace();
