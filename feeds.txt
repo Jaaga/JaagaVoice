@@ -13,3 +13,8 @@ http://www.hindu.com/rss/01hdline.xml
 http://feeds.feedburner.com/SingularityHub?format=xml
 http://feeds.we-make-money-not-art.com/wmmna
 http://www.indianart.in/feed
+http://feeds2.feedburner.com/futurismic_feed
+http://worldofweirdthings.com/feed/rss/
+http://edge.org/feeds/
+http://feeds.feedburner.com/SingularityHub
+http://feeds.feedburner.com/AcceleratingFuture
