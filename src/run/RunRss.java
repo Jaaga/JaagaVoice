@@ -2,23 +2,17 @@ package run;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import java.util.ArrayList;
 import java.util.List;
 
+import network.RssReader;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import org.apache.commons.io.FileUtils;
 
 import util.DBUtil;
 import util.Tools;
 
 import com.sun.syndication.feed.synd.SyndContentImpl;
 import com.sun.syndication.feed.synd.SyndEntry;
-
-import network.RssReader;
 /*
  * pass file listing all RSS feeds (each on separate line) as argument 1
  */

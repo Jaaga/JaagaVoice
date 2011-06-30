@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import processing.core.PApplet;
-
 import network.Doc;
 import nlp.LanguageModel;
 import speech.GenerateSableFile;
