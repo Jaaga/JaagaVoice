@@ -6,3 +6,10 @@ http://feeds.feedburner.com/rhizome-discuss?format=xml
 http://www.eyebeam.org/subscribe/full.xml
 http://feeds.feedburner.com/douglasrushkoff
 http://yruminate.wordpress.com/feed/
+http://feeds.wired.com/wired/index?format=xml
+http://feeds.wired.com/howtowiki?format=xml
+http://feeds.feedburner.com/MachinesLikeUs?format=xml
+http://www.hindu.com/rss/01hdline.xml
+http://feeds.feedburner.com/SingularityHub?format=xml
+http://feeds.we-make-money-not-art.com/wmmna
+http://www.indianart.in/feed
