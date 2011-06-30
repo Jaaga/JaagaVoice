@@ -119,16 +119,16 @@ public class Tools {
 		Pattern p1 = Pattern.compile(punct);
 		Matcher m1 = p1.matcher(sent);
 		retString = m1.replaceAll("");
-		retString = retString.replace("[", "");
-		retString = retString.replace("]", "");
-		retString = retString.replace("@", "");
+		retString = retString.replace("[", " ");
+		retString = retString.replace("]", " ");
+		retString = retString.replace("@", " ");
 		return retString;
 	}
 
 	public static String stripSpecialChars(String sent) {
 		//System.out.println("Input to normalization: " + sent);
 		String sent2  = Normalizer.normalize(sent, Normalizer.Form.NFD);
-		String retString = sent2.replaceAll("[^\\p{ASCII}]", "");
+		String retString = sent2.replaceAll("[^\\p{ASCII}]", " ");
 		//System.out.println("Output after normalization: " + retString);
 		return retString;
 	}
