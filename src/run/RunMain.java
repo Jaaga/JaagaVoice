@@ -86,6 +86,7 @@ public class RunMain {
 
 			//speak!
 			int success = Speak.festivalSpeak("tospeak.sable");
+			System.out.println("...");
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -123,9 +124,9 @@ public class RunMain {
 
 			//add ALL data to LM
 			for (Doc d: newDocs){
-				//System.out.println("\nsending to LM: " + d.title);
+				System.out.println("\nsending to LM: " + d.title);
 				lm.handle(d.title);
-				//```System.out.println("\nsending to LM: " + d.content);
+				System.out.println("\nsending to LM: " + d.content);
 				lm.handle(d.content);
 			}
 

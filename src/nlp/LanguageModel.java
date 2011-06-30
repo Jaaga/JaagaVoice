@@ -291,7 +291,7 @@ public class LanguageModel extends PApplet implements Serializable {
 			}
 			catch(Exception e){
 				count = 1;
-				e.printStackTrace();
+				//e.printStackTrace();
 				System.out.println("Cant analyze " + s);
 			}
 		}

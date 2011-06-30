@@ -116,7 +116,7 @@ public class Tools {
 		String retString;
 		//remove .,!?:-
 		//System.out.println("Input to strip punc: " + sent);
-		String punct = "[\\_#$&;.,:!?\"“”+()-/]";
+		String punct = "[\\_#$&;.,:!?\"“”+|=()-/]";
 		Pattern p1 = Pattern.compile(punct);
 		Matcher m1 = p1.matcher(sent);
 		retString = m1.replaceAll("");
