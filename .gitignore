@@ -28,3 +28,6 @@ local.properties
 
 ## CDT-specific
 .cproject
+
+# Language model
+jaaga.voice.lm
