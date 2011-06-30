@@ -37,17 +37,17 @@ public class Tools {
 			String replacement = HTMLEntities.unhtmlentities(found);
 			//System.out.println("replacing with: " + replacement);
 			input = input.replaceAll(found, replacement);
-			System.out.println(input);
+			//System.out.println("stripping: " + input);
 			m1 = p1.matcher(input);
 		}
-		
-		String result1 = m1.replaceAll(" ");
-		
+		String result1 = input;
+		//String result1 = m1.replaceAll(" ");
+		//System.out.println(result1);
 		//remove URLs
 		Pattern p2 = Pattern.compile(URLregex);
 		Matcher m2 = p2.matcher(result1);
 		String result2 = m2.replaceAll(" ");
-		//remove hashtags
+		/*//remove hashtags
 		Pattern p3 = Pattern.compile(HashRegex);
 		Matcher m3 = p3.matcher(result2);
 		String result3 = m3.replaceAll(replacementText);
@@ -59,9 +59,9 @@ public class Tools {
 		//remove rt from tweets
 		Pattern p5 = Pattern.compile(rtRegex);
 		Matcher m5 = p5.matcher(result4);
-		String result5 = m5.replaceAll(replacementText);
-		
-		return result5;
+		String result5 = m5.replaceAll(replacementText);*/
+		//System.out.println(result2);
+		return result2;
 	}
 	
 	public static List<String> getSentences(String input){
@@ -115,6 +115,7 @@ public class Tools {
 	public static String stripPunctuation(String sent) {
 		String retString;
 		//remove .,!?:-
+		//System.out.println("Input to strip punc: " + sent);
 		String punct = "[\\_#$&;.,:!?\"“”+()-/]";
 		Pattern p1 = Pattern.compile(punct);
 		Matcher m1 = p1.matcher(sent);
@@ -122,6 +123,7 @@ public class Tools {
 		retString = retString.replace("[", " ");
 		retString = retString.replace("]", " ");
 		retString = retString.replace("@", " ");
+		//System.out.println("Output from strip punc: " + retString);
 		return retString;
 	}
 

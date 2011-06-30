@@ -10,7 +10,7 @@ public class RunSystemCommand {
 	static private int runCommand(String cmd) 
 	throws IOException
 	{  
-		System.out.println("command: " + cmd);
+		//System.out.println("command: " + cmd);
 		// Create a list for storing  output.
 		ArrayList<String> list = new ArrayList<String>(); 
 
@@ -37,7 +37,7 @@ public class RunSystemCommand {
 
 		// Note: proc.exitValue() returns the exit value. 
 		// (Use if required)
-		System.out.println("Exit: " + proc.exitValue());
+		//System.out.println("Exit: " + proc.exitValue());
 		br.close(); // Done.
 
 		// Convert the list to a string and return

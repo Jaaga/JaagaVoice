@@ -86,7 +86,7 @@ public class SyllableSolution implements Solution {
 			//if there are no available children
 			//and we already have some words chosen
 			if(children.isEmpty() && words.size()>0){
-				System.out.println("no more children here - end word - solution");
+				//System.out.println("no more children here - end word - solution");
 				return true;
 			}
 		}

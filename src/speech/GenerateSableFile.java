@@ -59,14 +59,14 @@ public class GenerateSableFile extends PApplet{
 		words.add(words4);
 		
 		for (List<String> wordList: words){
-			for (String w: wordList){
+			for (String w: wordList){				
 				try {
 					ra.analyze(w);
 					String syl = ra.getSyllables();
 					sylCounter += LanguageModel.countSyllables(syl);
 				}
 				catch (Exception e){
-					e.printStackTrace();
+					//e.printStackTrace();
 					sylCounter += 1;
 				}
 

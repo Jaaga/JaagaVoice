@@ -32,18 +32,18 @@ public class RunMain {
 				//TODO get only unread RSS docs
 				newDocs = DBUtil.getUnreadRssDocs(true);
 
-				if (newDocs.size()==0) {
+				/*if (newDocs.size()==0) {
 					System.out.println("we have NO unread docs");
-				}
+				}*/
 
 				//delete file "NEW"
 				flag.delete();
 
 				//add new data to LM
 				for (Doc d: newDocs){
-					System.out.println("\nsending to LM: " + d.title);
+					System.out.println("\nNew Data: " + d.title);
 					lm.handle(d.title); 
-					System.out.println("\nsending to LM: " + d.content);
+					System.out.println("\nNew Data: " + d.content);
 					lm.handle(d.content);
 				}
 
@@ -56,7 +56,7 @@ public class RunMain {
 					System.exit(-1);
 				}
 			}
-			else System.out.println("no new data to read");
+			//else System.out.println("no new data to read");
 
 			//generate text using pluggable method
 
@@ -65,24 +65,27 @@ public class RunMain {
 			List<String> words2 = generateNextLine(lm, words1, false);
 			List<String> words3 = generateNextLine(lm, words2, false);
 			List<String> words4 = generateNextLine(lm, words3, true);
-			System.out.println();
-			System.out.println(words1);
-			System.out.println(words2);
-			System.out.println(words3);
-			System.out.println(words4);
-			System.out.println();
+			String text = "\n";
+			for (String s: words1) text = text.concat(s + " ");	
+			text = text.concat("\n");
+			for (String s: words2) text = text.concat(s + " ");
+			text = text.concat("\n");
+			for (String s: words3) text = text.concat(s + " ");
+			text = text.concat("\n");
+			for (String s: words4) text = text.concat(s + " ");
+			text = text.concat("\n");
+
+			System.out.println(text);
 
 			try {
 				//sable.generate(words1, "tospeak.sable");
 				sable.generate(words1, words2, words3, words4, "tospeak.sable");
-				System.out.println("generated: tospeak.sable");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 			//speak!
 			int success = Speak.festivalSpeak("tospeak.sable");
-			System.out.println("speaking result " + success);
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -120,9 +123,9 @@ public class RunMain {
 
 			//add ALL data to LM
 			for (Doc d: newDocs){
-				System.out.println("\nsending to LM: " + d.title);
+				//System.out.println("\nsending to LM: " + d.title);
 				lm.handle(d.title);
-				System.out.println("\nsending to LM: " + d.content);
+				//```System.out.println("\nsending to LM: " + d.content);
 				lm.handle(d.content);
 			}
 
@@ -147,32 +150,32 @@ public class RunMain {
 	private static List<String> generateNextLine(LanguageModel lm,
 			List<String> prevWords, boolean isLastLine) {
 		List<String> nextLine;
-		System.out.println("prevWords: " + prevWords);
+		//System.out.println("prevWords: " + prevWords);
 		if ( lm.isEndWord(prevWords.get(prevWords.size()-1) ))
 			nextLine = lm.generateSyllables(8);
 
 		else {
 			String last = prevWords.get(prevWords.size()-1); //get last word in last phrase
 			List<String> next = lm.generatePhrase(2, last);
-			System.out.println("next: " + next);
+			//System.out.println("next: " + next);
 			if (next.size() > 1){
-				System.out.println("size large enough");
+				//System.out.println("size large enough");
 				nextLine = lm.generateSyllables(8, next.get(next.size()-1));
 				if (nextLine.isEmpty()) nextLine = lm.generateSyllables(8);
 			}
 			else{
-				System.out.println("size too small");
+				//System.out.println("size too small");
 				nextLine = lm.generateSyllables(8);
 			}
 		}
 		if (isLastLine){
-			System.out.println("is last line");
+			//System.out.println("is last line");
 			if (! lm.isEndWord(nextLine.get(nextLine.size()-1) )){
-				System.out.println("not properly resolved");
+				//System.out.println("not properly resolved");
 				nextLine = lm.resolve(nextLine);
 			}
 		}
-		System.out.println(nextLine);
+		//System.out.println(nextLine);
 		return nextLine;
 	}
 

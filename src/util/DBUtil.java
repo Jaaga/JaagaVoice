@@ -1,18 +1,18 @@
 package util;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.*;
+
+import network.Doc;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import com.sun.syndication.feed.synd.SyndContentImpl;
-
-import network.*;
 
 public class DBUtil {
 	private static final int SQL_LIMIT = 5000;

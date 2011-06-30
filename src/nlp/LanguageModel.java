@@ -61,11 +61,12 @@ public class LanguageModel extends PApplet implements Serializable {
 			//System.out.println("sentence: " + sent);
 			//word tokenize, lowercase and remove punctuation
 			sent = Tools.stripPunctuation(sent);
-			sent = Tools.stripSpecialChars(sent);
+			//sent = Tools.stripSpecialChars(sent);
 			sent = sent.toLowerCase();
 			
-			System.out.println("training on: " + sent);
-			String[] words = RiTa.tokenize(sent);
+			//System.out.println("training on: " + sent);
+			String[] words = sent.split("\\s+");
+			//String[] words = RiTa.tokenize(sent);
 			//add start and end words to arrays
 			beginnings.add(words[0]);
 			ends.add(words[words.length-1]);
@@ -189,7 +190,7 @@ public class LanguageModel extends PApplet implements Serializable {
 			}
 			if (weightedPossibilities.size()>0){
 				//choose 
-				System.out.println("Number of options: " + weightedPossibilities.size());
+				//System.out.println("Number of options: " + weightedPossibilities.size());
 				words.add((String) RiTa.random(weightedPossibilities));
 			}
 			else{
@@ -206,7 +207,7 @@ public class LanguageModel extends PApplet implements Serializable {
 		//now choose a next word based on probability
 		//repeat, increasing N context until stop condition
 		for (int i=1; i<numWords; i++){
-			System.out.println("choosing word " + i);
+			//System.out.println("choosing word " + i);
 			//update ngram size based on # words chosen so far
 			int n = 0;
 			if (words.size()+1<=NGRAM)
@@ -229,7 +230,7 @@ public class LanguageModel extends PApplet implements Serializable {
 			}
 			if (weightedPossibilities.size()>0){
 				//choose 
-				System.out.println("Number of options: " + weightedPossibilities.size());
+				//System.out.println("Number of options: " + weightedPossibilities.size());
 				words.add((String) RiTa.random(weightedPossibilities));
 			}
 			else{
@@ -254,7 +255,7 @@ public class LanguageModel extends PApplet implements Serializable {
 		SyllableSolution solution = new SyllableSolution(this, NGRAM, numSyllables, startWord);
 		solver.solve(solution);
 		if (solver.getBest()==null){
-			System.out.println("no solution");
+			//System.out.println("no solution");
 			List<String> empty = new ArrayList<String>();
 			return empty;
 		}
@@ -265,6 +266,7 @@ public class LanguageModel extends PApplet implements Serializable {
 	public static int countSyllables(String syl) {
 		// syllables are divided by / 
 		int count = 1;
+		if (syl.length() == 0) return count;
 		String regex = "/";
 		Pattern p1 = Pattern.compile(regex);
 		Matcher m1 = p1.matcher(syl);
@@ -278,14 +280,18 @@ public class LanguageModel extends PApplet implements Serializable {
 		RiLetterToSound.VERBOSE = false;
 		
 		int count = 0;
-		for (String s: words){
+		for (String s: words){			
+			s = Tools.stripSpecialChars(s);
+			s = s.replace("'", "");
+			if (s.length() == 0) continue;
 			try {
 				ra.analyze(s);
 				String syl = ra.getSyllables();
 				count += countSyllables(syl);
 			}
 			catch(Exception e){
-				//e.printStackTrace();
+				count = 1;
+				e.printStackTrace();
 				System.out.println("Cant analyze " + s);
 			}
 		}
@@ -368,13 +374,13 @@ public class LanguageModel extends PApplet implements Serializable {
 		String[] tags = RiTa.posTag(tokens);
 		
 		if (tags[0].contains("nn")) {
-			System.out.println("is noun");
+			//System.out.println("is noun");
 			return true; //end on noun OK
 		}
 		if (ends.contains(string) 
 				&& !tags[0].equals("dt") 
 				&& !tags[0].equals("in")) {
-			System.out.println("is an end");
+			//System.out.println("is an end");
 			return true; //end word
 		}
 		else return false;
@@ -387,8 +393,8 @@ public class LanguageModel extends PApplet implements Serializable {
 		//now choose a next word based on probability
 		//repeat, increasing N context until stop condition
 		while (! isEndWord(words.get(words.size()-1))){
-			System.out.println(words);
-			System.out.println("choosing word towards end word");
+			//System.out.println(words);
+			//System.out.println("choosing word towards end word");
 			
 			//update ngram size based on # words chosen so far
 			//limit to bigram for this
@@ -413,11 +419,11 @@ public class LanguageModel extends PApplet implements Serializable {
 			}
 			if (weightedPossibilities.size()>0){
 				//choose 
-				System.out.println("Number of options: " + weightedPossibilities.size());
+				//System.out.println("Number of options: " + weightedPossibilities.size());
 				words.add((String) RiTa.random(weightedPossibilities));
 			}
 			else{
-				System.out.println("no more options");
+				//System.out.println("no more options");
 				break;
 			}
 		}
