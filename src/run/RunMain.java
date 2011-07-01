@@ -10,9 +10,37 @@ import speech.GenerateSableFile;
 import speech.Speak;
 import util.DBUtil;
 import util.Tools;
-/*
- * ARGS - 0 - language model name
- *        1 - NGRAM level to use ie. 3,4,5
+/**
+ * @author Heather Dewey-Hagborg
+ * @version 1.0
+ * This is the main class to run for Jaaga Voice. This class handles all language model operations, text generation and speech.
+ * There are 2 commandline arguments: 
+ * Arg 0 - language model name ie. jaaga.voice.lm
+ * Arg 1 - NGRAM level to use ie. 3,4,5...
+ * Example use:
+ * java -Xmx1000m -jar jaagavoice.jar jaaga.voice.lm 3
+ * may need to tweak memory parameter (-Xmx...m) as language model gets larger
+ * 
+ * If you have issues quit the terminal it is running in and re-run. SOmetimes if you interrupt execution festival doesn't quit 
+ * and you end up with ghost processes plugging up the audio.
+ * <p>
+ * the trade off here is the higher the ngram the more like the original the genrated text will be
+ * the lower the ngram level the more possible phrases but the more nonsensical they may be.
+ * you must choose the correct ngram number for a saved language model.
+ * if you want to experiment with a new ngram level delete the saved language model.
+ * </p>
+ * <p>
+ * The process begins by checking to see if we have a saved language model. if we don't one is created and the entire database is loaded.
+ * If we have one it is deserialized and loaded into memory.
+ * This happens once in the setup method.
+ * Then we enter a loop where we check for new data (signalled by a NEW flag file in the top directory.)
+ * If we have new data we load it and reserialize the language model.
+ * </p>
+ * <p>
+ * Finally we generate text and create a sable file with intonation markup which is read by Festival TTS.
+ * </p>
+ * 
+ * 
  */
 public class RunMain {
 	static LanguageModel lm;
@@ -29,12 +57,11 @@ public class RunMain {
 				//new  entries from the DB
 				//mark these entries as read
 				List<Doc> newDocs;
-				//TODO get only unread RSS docs
 				newDocs = DBUtil.getUnreadRssDocs(true);
 
-				/*if (newDocs.size()==0) {
+				if (newDocs.size()==0) {
 					System.out.println("we have NO unread docs");
-				}*/
+				}
 
 				//delete file "NEW"
 				flag.delete();
@@ -56,7 +83,7 @@ public class RunMain {
 					System.exit(-1);
 				}
 			}
-			//else System.out.println("no new data to read");
+			else System.out.println("no new data to read");
 
 			//generate text using pluggable method
 
@@ -88,11 +115,10 @@ public class RunMain {
 			//speak!
 			System.out.println(".");
 			int success = Speak.festivalSpeak("tospeak.sable");
-			System.out.println(".");
+			System.out.println(success);
 			
 			//Thread.sleep(20000);
 			
-			//System.out.println(".");
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -125,7 +151,6 @@ public class RunMain {
 			//No saved LM file - INIT a new LM
 			System.out.println("making new language model file");
 			lm = new LanguageModel(N);
-			//TODO get only RSS docs
 			List<Doc> newDocs = DBUtil.getAllRssDocs(true);
 
 			//add ALL data to LM

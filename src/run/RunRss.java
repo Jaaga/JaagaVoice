@@ -13,8 +13,16 @@ import util.Tools;
 
 import com.sun.syndication.feed.synd.SyndContentImpl;
 import com.sun.syndication.feed.synd.SyndEntry;
-/*
- * pass file listing all RSS feeds (each on separate line) as argument 1
+/**
+ * @author Heather Dewey-Hagborg
+ * @version 1.0
+ * 
+ * This class handles reading RSS feeds and loading them into the database.
+ * Arg 0 - name of file listing all RSS feeds (each on separate line) 
+ * ie. feeds.txt
+ * 
+ * Example use:
+ * java -jar runrss.jar feeds.txt
  */
 public class RunRss {
 	public static void main(String args[]){

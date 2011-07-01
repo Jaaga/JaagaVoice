@@ -105,13 +105,11 @@ public class RunSystemCommand {
 			System.err.println(e); 
 			} 
 		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 			System.out.println("process interrupted");
+			e.printStackTrace();
 		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 			System.out.println("timeout");
+			e.printStackTrace();
 		}
 		return status;
 	}
