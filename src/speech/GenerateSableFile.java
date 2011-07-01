@@ -11,6 +11,7 @@ import rita.RiAnalyzer;
 import nlp.LanguageModel;
 
 import util.Tools;
+//female 1 also works well here 
 
 public class GenerateSableFile extends PApplet{
 	private String sableHeader = "<?xml version=\"1.0\"?><!DOCTYPE SABLE PUBLIC \"-//SABLE//DTD SABLE speech mark up//EN\" \"Sable.v0_2.dtd\"[]>\n<SABLE>\n<SPEAKER NAME=\"jaaga\">\n";

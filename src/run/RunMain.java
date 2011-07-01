@@ -86,12 +86,13 @@ public class RunMain {
 			//could write text to a file here for screen output
 			
 			//speak!
+			System.out.println(".");
 			int success = Speak.festivalSpeak("tospeak.sable");
 			System.out.println(".");
 			
-			Thread.sleep(10000);
+			//Thread.sleep(20000);
 			
-			System.out.println(".");
+			//System.out.println(".");
 		}
 		catch (Exception e){
 			e.printStackTrace();
