@@ -19,6 +19,12 @@ import com.tecnick.htmlutils.htmlentities.HTMLEntities;
 
 import rita.RiTa;
 
+/**
+ * 
+ * @author Heather Dewey-Hagborg
+ * Basic utilities for writing/reading files, serializing and deserializing and stripping special characters etc.
+ *
+ */
 public class Tools {
 	public static String replaceJunk(String input, String replacementText){
 		//what is junk?

@@ -21,6 +21,12 @@ import rita.RiTa;
 import rita.support.RiLetterToSound;
 import util.Tools;
 
+/**
+ * Main language model class. Contains statistical properties of the input texts
+ * as well as text generation methods.
+ * @author Heather Dewey-hagborg
+ * @version 1.0
+ */
 
 public class LanguageModel extends PApplet implements Serializable {
 
@@ -31,6 +37,9 @@ public class LanguageModel extends PApplet implements Serializable {
 	List <String> beginnings;
 	List <String>  ends;
 
+	/**
+	 * create a new ngram model
+	 */
 	private void initializeNgramMap(){
 		allNgramCounts = Collections.synchronizedMap(new HashMap<Integer, HashMap<ArrayList<String>, Integer>>());
 		for (int i=1; i<=NGRAM; i++){
@@ -40,18 +49,19 @@ public class LanguageModel extends PApplet implements Serializable {
 		beginnings = new ArrayList<String>();
 		ends = new ArrayList<String>();
 	}
-
+	
 	public LanguageModel(int ngram){
 		NGRAM = ngram;
 		initializeNgramMap();
 	}
-
+	/**
+	 * 
+	 * @param s -  string of text to train on. will be stripped of special chars, tokenized into sentences and characters.
+	 */
 	public void handle(String s){
 		train(s);
 	}
 
-	//add tokenized sentences -> words in the following string to model
-	//strip URLS etc. 
 	private void train(String s){
 		//replace URLS, hashtags, etc. with ~
 		String stripped = Tools.replaceJunk(s, ". ");
@@ -92,10 +102,16 @@ public class LanguageModel extends PApplet implements Serializable {
 		}
 	}
 
-	//# unique ngrams in model
+	/**
+	 * # unique ngrams in model
+	 */
 	public int getNumNgrams(int ngramLevel){
 		return allNgramCounts.get(ngramLevel).size();
 	}
+	/**
+	 * 
+	 * @return number of ngrams in model
+	 */
 	public int getNumAllNgrams() {
 		int total = 0;
 		for (int i=1; i<=NGRAM; i++){
@@ -104,16 +120,24 @@ public class LanguageModel extends PApplet implements Serializable {
 		return total;
 	}
 
-	//return hashmap of ngram-> # of occurences for a specific NGRAM level
+	/**
+	 * @return hashmap of ngram-> # of occurrences for a specific NGRAM level
+	 */
 	public HashMap<ArrayList<String>, Integer> getCounts(int ngramLevel){
 		return allNgramCounts.get(ngramLevel);
 	}
 
-	//return hashmap of ngram-> # of occurences for a all NGRAM levels
+	/**
+	 * @return hashmap of ngram-> # of occurences for a all NGRAM levels
+	 */
 	public Map<Integer, HashMap<ArrayList<String>, Integer>> getAllCounts(){
 		return allNgramCounts;
 	}
 
+	/**
+	 * 
+	 * @return ArrayList<ArrayList<String>> flattened arraylist of ngrams
+	 */
 	public ArrayList<ArrayList<String>> getFlattenedNgramsList() {
 		ArrayList<ArrayList<String>> s = new ArrayList<ArrayList<String>>();
 		for(int i=1; i<=NGRAM; i++){
@@ -122,7 +146,10 @@ public class LanguageModel extends PApplet implements Serializable {
 		}
 		return s;
 	}
-
+	
+	/**
+	 * pretty print language model
+	 */
 	public void print(){
 		System.out.println("Language Model");
 		System.out.println(" using up to " + NGRAM + "-grams");
@@ -141,25 +168,46 @@ public class LanguageModel extends PApplet implements Serializable {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return a random beginning word pulled from our language model list of possible beginning words.
+	 */
 	public String getRandomBeginningWord(){
 		String s = (String) RiTa.random(beginnings);
 		return s;
 	}
 	
+	/**
+	 * Same as getrandomBeginningWord but returns the size of the possible words chosen from.
+	 * @param words
+	 * @return a random beginning word
+	 */
 	public int getRandomBeginningWord(List <String> words){
 		String s = (String) RiTa.random(beginnings);
 		words.add(s);
 		return beginnings.size();
 	}
-
+/**
+ * 
+ * @return list of all beginning words we have encountered.
+ */
 	public List<String> getBeginnings() {
 		return beginnings;
 	}
-
+/**
+ * 
+ * @return list of all end words we have encountered.
+ * 
+ */
 	public List<String> getEnds() {
 		return ends;
 	}
-
+/**
+ * generate a phrase from the language model.
+ * this is the simplest generation method.
+ * @param numWords to generate
+ * @return generated phrase
+ */
 	public List<String> generatePhrase(int numWords) {
 		List <String> words = new ArrayList<String>();
 		words.add(getRandomBeginningWord());
@@ -200,6 +248,12 @@ public class LanguageModel extends PApplet implements Serializable {
 		return words;
 	}
 	
+	/**
+	 * Same as generate phrase but allows you to pass in the first word to start with.
+	 * @param numWords
+	 * @param start
+	 * @return list of generated words in phrase
+	 */
 	public List<String> generatePhrase(int numWords, String start) {
 		List <String> words = new ArrayList<String>();
 		words.add(start);
@@ -239,7 +293,11 @@ public class LanguageModel extends PApplet implements Serializable {
 		}
 		return words;
 	}
-
+/**
+ * Attempt to generate a phrase with a specified number of syllables
+ * @param numSyllables to generate ie. 8
+ * @return genearated phrase
+ */
 	public List<String> generateSyllables(int numSyllables) {
 		DepthFirstSolver solver = new DepthFirstSolver();
 		SyllableSolution solution = new SyllableSolution(this, NGRAM, numSyllables);
@@ -248,6 +306,12 @@ public class LanguageModel extends PApplet implements Serializable {
 		return solver.getBest().getObjective();
 	}
 	
+	/**
+	 * Same as generateSyllables but allows specification of starting word.
+	 * @param numSyllables
+	 * @param startWord
+	 * @return list of generated word in phrase
+	 */
 	public List<String> generateSyllables(int numSyllables, String startWord) {
 		//System.out.println("trying to generate with " + startWord);
 		//System.out.println("poss: " + allNgramCounts.get(NGRAM).get(startWord));
@@ -263,6 +327,11 @@ public class LanguageModel extends PApplet implements Serializable {
 		return solver.getBest().getObjective();
 	}
 	
+	/**
+	 * count syllables in a string
+	 * @param syl
+	 * @return number of estimated syllables
+	 */
 	public static int countSyllables(String syl) {
 		// syllables are divided by / 
 		int count = 1;
@@ -275,6 +344,11 @@ public class LanguageModel extends PApplet implements Serializable {
 		return count;
 	}
 
+	/**
+	 * Count syllables in a list of strings.
+	 * @param words
+	 * @return number of estimated syllables.
+	 */
 	public int countSyllables(List <String> words) {
 		RiAnalyzer ra = new RiAnalyzer(this);
 		RiLetterToSound.VERBOSE = false;
@@ -298,17 +372,30 @@ public class LanguageModel extends PApplet implements Serializable {
 		return count;
 	}
 	
-	
+	/**
+	 * Randomize the list of beginning words
+	 * @return randomized list.
+	 */
 	public List<String> getRandomBeginnings() {
 		Collections.shuffle(beginnings);
 		return beginnings;
 	}
+	
+	/**
+	 * Randomize the list children of children of this phrase generated so far
+	 * @param words
+	 * @return list of child words
+	 */
 	public List<String> getRandomChildren(List<String> words){
 		List<String> children = getChildren(words);
 		Collections.shuffle(children);
 		return children;
 	}
-	
+	/**
+	 * Find all possible contnuations of this phrase so far.
+	 * @param words
+	 * @return list of strings of possible next words.
+	 */
 	public List<String> getChildren(List<String> words){
 		int n=words.size()+1;
 		if (words.size() >= NGRAM) n=NGRAM;
@@ -331,8 +418,12 @@ public class LanguageModel extends PApplet implements Serializable {
 	}
 
 	
-
-	List<String> getStress(String s) {
+/**
+ * attempt to get placement of stresses within this string 
+ * @param s
+ * @return tokenized list of stresses in string
+ */
+	public List<String> getStress(String s) {
 		List<String> stressesTokenized = new ArrayList<String>();
 		RiAnalyzer ra = new RiAnalyzer(this);
 		String stresses;
@@ -356,6 +447,12 @@ public class LanguageModel extends PApplet implements Serializable {
 		return stressesTokenized;
 	}
 	
+	/**
+	 * Attempt to get stresses of all words in this list
+	 * return as list
+	 * @param words
+	 * @return list of stresses per word in list passed in
+	 */
 	public List<String> getStresses(List<String> words) {
 		ArrayList<String> stresses = new ArrayList<String>();
 		for (String w: words){
@@ -366,7 +463,12 @@ public class LanguageModel extends PApplet implements Serializable {
 		}
 		return stresses;
 	}
-
+/**
+ * Determine if the word passed in is an end word.
+ * Is it a noun? Or is it contained in our model of end words encountered so far?
+ * @param string
+ * @return true if the word is an end word, false otherwise
+ */
 	public boolean isEndWord(String string) {
 		if (string.length() == 0) return false;
 		
@@ -386,6 +488,11 @@ public class LanguageModel extends PApplet implements Serializable {
 		else return false;
 	}
 
+	/**
+	 * Attempt to resolve the existing words in this generated phrase to a sentence with a proper ending word.
+	 * @param existingWords
+	 * @return list of words in the resolved phrase
+	 */
 	public List<String> resolve(List<String> existingWords) {
 		List <String> words = new ArrayList<String>();
 		words.addAll(existingWords);

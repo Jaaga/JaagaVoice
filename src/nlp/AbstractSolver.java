@@ -2,8 +2,10 @@ package nlp;
 
 import java.util.List;
 
-/*
- * http://www.brpreiss.com/books/opus5/html/page442.html
+
+/**
+ * @author Heather Dewey-Hagborg based on http://www.brpreiss.com/books/opus5/html/page442.html
+ * @version 1.0
  */
 
 public abstract class AbstractSolver implements Solver {

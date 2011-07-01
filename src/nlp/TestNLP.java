@@ -8,8 +8,9 @@ import org.apache.commons.io.FileUtils;
 public class TestNLP {
 
 	/**
-	 * @param args
-	 * @throws IOException 
+	 * 
+	 * test text generation from language model using mahabharata
+	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
 		LanguageModel lm = new LanguageModel(3);

@@ -14,6 +14,11 @@ import org.jsoup.nodes.Document;
 
 import com.sun.syndication.feed.synd.SyndContentImpl;
 
+/**
+ * Interface with database
+ * @author Freeman Murray
+ *
+ */
 public class DBUtil {
 	private static final int SQL_LIMIT = 5000;
 	static String url = "jdbc:mysql://localhost:3306/";

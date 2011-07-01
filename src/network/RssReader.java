@@ -7,7 +7,11 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
-
+/**
+ * Simple class implements an rss feed reader
+ * @author Heather Dewey-Hagborg
+ *
+ */
 public class RssReader {
 	URL url;
 	XmlReader reader = null;

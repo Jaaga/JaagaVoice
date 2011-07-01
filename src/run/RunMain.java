@@ -46,6 +46,9 @@ public class RunMain {
 	static LanguageModel lm;
 	static String lmPath;
 	
+	/**
+	 * Main loop. Updates langauge model, generates text and speaks.
+	 */
 	public static void loop(){
 		try{
 			//check for existence of file "NEW"
@@ -124,6 +127,11 @@ public class RunMain {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Setup method, runs once.
+	 * Checks for existence of language model and deserializes. Creates new if one does not exist.
+	 * @param args
+	 */
 	public static void setup(String args[]){
 		//check for a previous saved language (markov) model
 		//if it exists deserialize and load it.
@@ -172,6 +180,10 @@ public class RunMain {
 		}
 	}
 	
+	/**
+	 * Calls setup and loop methods.
+	 * @param args
+	 */
 	public static void main(String args[]){
 		setup(args);
 		while(true) loop();
@@ -179,6 +191,16 @@ public class RunMain {
 		
 	}
 
+	/**
+	 * If we have already generated a line of text we don't want the following line to be completely unrelated.
+	 * This method attempts to determine if the previous line ended on an end word or not. If it didn't
+	 * we attempt to continue the first line using only bigram context.
+	 * @param lm - the language model object
+	 * @param prevWords - string of previous words context ie. the last line
+	 * @param isLastLine - is this new line the last ina verse? If so we want to make sure 
+	 * it ends with a proper ending word so it sounds resolved.
+	 * @return the generated sentence.
+	 */
 	private static List<String> generateNextLine(LanguageModel lm,
 			List<String> prevWords, boolean isLastLine) {
 		List<String> nextLine;

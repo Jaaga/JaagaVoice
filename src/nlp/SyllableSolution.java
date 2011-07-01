@@ -3,7 +3,12 @@ package nlp;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @author Heather Dewey-Hagborg based on http://www.brpreiss.com/books/opus5/html/page442.html
+ * @version 1.0
+ * 
+ * Custom implementation of backtracking algorithm to find a solution to generating a chain of X specified syllables.
+ */
 public class SyllableSolution implements Solution {
 	List <String> words = new ArrayList<String>();
 	LanguageModel lm;

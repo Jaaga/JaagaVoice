@@ -3,6 +3,12 @@ package util;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
+
+/**
+ * Run system commands including time out function.
+ * @author Heather Dewey-Hagborg
+ * @version 1.0
+ */
 public class RunSystemCommand {
 
 	public static int executeCommandLine(final String commandLine,

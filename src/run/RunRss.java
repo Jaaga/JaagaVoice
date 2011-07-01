@@ -25,6 +25,10 @@ import com.sun.syndication.feed.synd.SyndEntry;
  * java -jar runrss.jar feeds.txt
  */
 public class RunRss {
+	/**
+	 * Main method, runs rss feed reader and saves to database
+	 * @param string the feed file listing RSS feeds to read
+	 */
 	public static void main(String args[]){
 		File feedFile = new File(args[0]);
 		List<String> feeds = null;
