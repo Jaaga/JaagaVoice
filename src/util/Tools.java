@@ -140,4 +140,9 @@ public class Tools {
 		//System.out.println("Output after normalization: " + retString);
 		return retString;
 	}
+
+	public static String stripApostraphes(String w) {
+		String ret = w.replaceAll("'", ""); 
+		return ret;
+	}
 }

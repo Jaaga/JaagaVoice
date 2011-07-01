@@ -27,6 +27,7 @@ public class GenerateSableFile extends PApplet{
 		
 		int sylCounter = 0;
 		for (String w: words){
+			w = Tools.stripApostraphes(w);
 			try {
 				ra.analyze(w);
 				String syl = ra.getSyllables();
@@ -66,6 +67,7 @@ public class GenerateSableFile extends PApplet{
 		
 		for (List<String> wordList: words){
 			for (String w: wordList){				
+				w = Tools.stripApostraphes(w);
 				try {
 					ra.analyze(w);
 					String syl = ra.getSyllables();
